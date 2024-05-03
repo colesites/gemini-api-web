@@ -1,0 +1,22 @@
+body {
+    margin: 40px;
+    font-size: 40px;
+}
+
+input[type=file] {
+    font-size: 60px;
+}
+
+.text-input {
+    font-size: 80px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.text-output {
+    line-height: 80px;
+}
+
+label {
+    margin-bottom: 80px;
+}

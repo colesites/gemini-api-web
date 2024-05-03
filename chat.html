@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Generative AI Web</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p id="history"></p>
+<p id="input"></p>
+<p id="output"></p>
+<script type="importmap">
+    {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+</script>
+<script type="module">
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const API_KEY = "AIzaSyAX5j8LxFG-u9B6ilJt7FniU5C5o5RXzzI";
+
+// Access your API key (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+let chatHistory = [];
+
+async function run() {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+  const chat = model.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello, I have 2 dogs in my house." }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
+    generationConfig: {
+      maxOutputTokens: 100,
+    },
+  });
+
+  const msg = "How many paws are in my house?";
+
+  const result = await chat.sendMessage(msg);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+
+  // Display the prompt and generated text in the HTML paragraphs
+  //document.getElementById("input").textContent = msg;
+  //document.getElementById("output").textContent = text;
+
+    chatHistory.push({ role: "user", text: msg });
+    chatHistory.push({ role: "model", text: text });
+
+    const formattedHistory = chatHistory.map(entry => `${entry.role}: ${entry.text}`).join("\n");
+    document.getElementById("history").textContent = formattedHistory
+}
+
+run();
+</script>
+</body>
+</html>
